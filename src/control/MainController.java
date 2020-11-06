@@ -1,15 +1,16 @@
 package control;
 
 import model.Exam;
+import model.Stack;
 
 /**
  * Created by Jean-Pierre on 01.11.2016.
  */
 public class MainController {
 
-    private Exam stackOfUncorrected; //TODO: 02 - Sobald der Stack implementiert ist, wird der Controller um die Datenstruktur erweitert.
+    private Stack<Exam> stackOfUncorrected; //TODO: 02 - Sobald der Stack implementiert ist, wird der Controller um die Datenstruktur erweitert.
     private Exam currentCorrection;
-    private Exam stackOfCorrected;
+    private Stack<Exam> stackOfCorrected;
     private char pupilName;
 
 
@@ -20,6 +21,8 @@ public class MainController {
     public MainController(){
         pupilName = 'A';
         //TODO: 03 - Hier muss später eine Initialisierung der Stacks stattfinden.
+        stackOfUncorrected = new Stack<>();
+        stackOfCorrected = new Stack<>();
     }
 
     /**
@@ -28,10 +31,28 @@ public class MainController {
      */
     public String[] showUncorrectedExams(){
         //TODO: 05 - Bei einem Stack ist es unüblich, auf alle Daten innerhalb des Stacks zuzugreifen. Gerade das ist hier aber nötig! Hier muss mit einem "Trick" gearbeitet werden, ohne die Klasse Stack zu überarbeiten.
-        String[] output = new String[1];
-        if(stackOfUncorrected != null){
-            output[0] = stackOfUncorrected.toString();
+        Stack<Exam> help = new Stack<>();
+        String[] output = null;
+
+        if(!stackOfUncorrected.isEmpty()){
+            int count = 0;
+
+            while(!stackOfUncorrected.isEmpty()){
+                help.push(stackOfUncorrected.top());
+                stackOfUncorrected.pop();
+                count++;
+            }
+            output = new String[count];
+
+
+            for(int i = output.length-1; !help.isEmpty(); i--) {
+                output[i] = help.top().toString();
+
+                stackOfUncorrected.push(help.top());
+                help.pop();
+            }
         }else{
+            output = new String[1];
             output[0] = "Stapel ist leer.";
         }
         return output;
@@ -54,10 +75,28 @@ public class MainController {
      */
     public String[] showCorrectedExams(){
         //TODO: 08 - siehe die Methode showUncorrectedExams!
-        String[] output = new String[1];
-        if(stackOfCorrected != null){
-            output[0] = stackOfCorrected.toString();
+        Stack<Exam> help = new Stack<>();
+        String[] output = null;
+
+        if(!stackOfCorrected.isEmpty()){
+            int count = 0;
+
+            while(!stackOfCorrected.isEmpty()){
+                help.push(stackOfCorrected.top());
+                stackOfCorrected.pop();
+                count++;
+            }
+            output = new String[count];
+
+
+            for(int i = output.length-1; !help.isEmpty(); i--) {
+                output[i] = help.top().toString();
+
+                stackOfCorrected.push(help.top());
+                help.pop();
+            }
         }else{
+            output = new String[1];
             output[0] = "Stapel ist leer.";
         }
         return output;
@@ -69,9 +108,9 @@ public class MainController {
      */
     public String addNewExam(){
         //TODO: 04 - Hinzufügen von Objekten auf den Stack.
-        stackOfUncorrected = new Exam(String.valueOf(pupilName));
+        stackOfUncorrected.push(new Exam(String.valueOf(pupilName)));
         pupilName++;
-        return stackOfUncorrected.toString();
+        return stackOfUncorrected.top().toString();
     }
 
     /**
@@ -80,9 +119,9 @@ public class MainController {
      */
     public boolean startCorrection(){
         //TODO: 06 - Entfernen des obersten Objekts eines Stack.
-        if(currentCorrection == null && stackOfUncorrected != null){
-            currentCorrection = stackOfUncorrected;
-            stackOfUncorrected = null;
+        if(currentCorrection == null && !stackOfUncorrected.isEmpty()){
+            currentCorrection = stackOfUncorrected.top();
+            stackOfUncorrected.pop();
             return true;
         }
         return false;
@@ -95,9 +134,9 @@ public class MainController {
     public String endCorrection(){
         //TODO: 07 - Hinzufügen von Objekten auf den Stack.
         if(currentCorrection != null){
-            stackOfCorrected = currentCorrection;
+            stackOfCorrected.push(currentCorrection);
             currentCorrection = null;
-            return stackOfCorrected.toString();
+            return stackOfCorrected.top().toString();
         }
         return "keine Klausur";
     }
