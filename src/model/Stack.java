@@ -4,24 +4,24 @@ package model;
 public class Stack<ContentType> {
 
     private class Node {
-        private Node before;
+        private Node next;
         private ContentType content;
 
         public Node(ContentType pContent) {
             content = pContent;
-            before = null;
+            next = null;
         }
 
         public ContentType getContent() {
             return content;
         }
 
-        public void setBefore(Node before) {
-            this.before = before;
+        public void setNext(Node next) {
+            this.next = next;
         }
 
-        public Node getBefore() {
-            return before;
+        public Node getNext() {
+            return next;
         }
     }
 
@@ -45,7 +45,7 @@ public class Stack<ContentType> {
             if(this.isEmpty()){
                 top = newNode;
             }else{
-                newNode.setBefore(top);
+                newNode.setNext(top);
                 top = newNode;
             }
         }
@@ -53,7 +53,7 @@ public class Stack<ContentType> {
 
     public void pop(){
         if(!isEmpty()){
-            top = top.getBefore();
+            top = top.getNext();
         }
     }
 
