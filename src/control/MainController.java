@@ -3,6 +3,9 @@ package control;
 import model.Exam;
 import model.Stack;
 
+import java.awt.*;
+import java.net.URL;
+
 /**
  * Created by Jean-Pierre on 01.11.2016.
  */
@@ -31,30 +34,8 @@ public class MainController {
      */
     public String[] showUncorrectedExams(){
         //TODO: 05 - Bei einem Stack ist es unüblich, auf alle Daten innerhalb des Stacks zuzugreifen. Gerade das ist hier aber nötig! Hier muss mit einem "Trick" gearbeitet werden, ohne die Klasse Stack zu überarbeiten.
-        Stack<Exam> help = new Stack<>();
-        String[] output = null;
+        String[] output = showStackInfo(stackOfUncorrected);
 
-        if(!stackOfUncorrected.isEmpty()){
-            int count = 0;
-
-            while(!stackOfUncorrected.isEmpty()){
-                help.push(stackOfUncorrected.top());
-                stackOfUncorrected.pop();
-                count++;
-            }
-            output = new String[count];
-
-
-            for(int i = output.length-1; !help.isEmpty(); i--) {
-                output[i] = help.top().toString();
-
-                stackOfUncorrected.push(help.top());
-                help.pop();
-            }
-        }else{
-            output = new String[1];
-            output[0] = "Stapel ist leer.";
-        }
         return output;
     }
 
@@ -75,30 +56,8 @@ public class MainController {
      */
     public String[] showCorrectedExams(){
         //TODO: 08 - siehe die Methode showUncorrectedExams!
-        Stack<Exam> help = new Stack<>();
-        String[] output = null;
+        String[] output = showStackInfo(stackOfCorrected);
 
-        if(!stackOfCorrected.isEmpty()){
-            int count = 0;
-
-            while(!stackOfCorrected.isEmpty()){
-                help.push(stackOfCorrected.top());
-                stackOfCorrected.pop();
-                count++;
-            }
-            output = new String[count];
-
-
-            for(int i = output.length-1; !help.isEmpty(); i--) {
-                output[i] = help.top().toString();
-
-                stackOfCorrected.push(help.top());
-                help.pop();
-            }
-        }else{
-            output = new String[1];
-            output[0] = "Stapel ist leer.";
-        }
         return output;
     }
 
@@ -139,5 +98,34 @@ public class MainController {
             return stackOfCorrected.top().toString();
         }
         return "keine Klausur";
+    }
+
+    private String[] showStackInfo(Stack<Exam> stack){
+        Stack<Exam> help = new Stack<>();
+        String[] output;
+
+        if(!stack.isEmpty()){
+            int count = 0;
+
+            while(!stack.isEmpty()){
+                help.push(stack.top());
+                stack.pop();
+                count++;
+            }
+            output = new String[count];
+
+
+            for(int i = output.length-1; !help.isEmpty(); i--) {
+                output[i] = help.top().toString();
+
+                stack.push(help.top());
+                help.pop();
+            }
+        }else{
+            output = new String[1];
+            output[0] = "Stapel ist leer.";
+        }
+
+        return output;
     }
 }
